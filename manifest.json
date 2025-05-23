@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "BudolBlocker.AI",
+    "version": "1.0",
+    "description": "Detects and flags misleading social media content",
+    "permissions": ["scripting", "activeTab", "storage"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icons/icon128.png"
+    },
+"content_scripts": [
+  {
+    "matches": ["https://*.facebook.com/*", "https://*.tiktok.com/*", "file://*/*"],
+    "js": ["content.js"]
+  }
+],
+    "icons": {
+      "128": "icons/icon128.png"
+    }
+  }

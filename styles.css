@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    background-color: #d62828;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #a61c1c;
+  }
+
+  /* shousld fix this lousgy stlye, so bullshit */
