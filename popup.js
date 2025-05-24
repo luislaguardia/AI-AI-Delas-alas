@@ -172,7 +172,7 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
               const feedback = statsBox.querySelector("#userFeedback").value.trim();
               if (!feedback) return alert("Please enter feedback before sending.");
               console.log("Feedback submitted:", feedback);
-              alert("✅ Feedback submitted. Thank you!");
+              alert("Feedback submitted. Thank you!");
               statsOverlay.remove();
             });
 
