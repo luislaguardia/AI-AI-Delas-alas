@@ -1,0 +1,1 @@
+// content.js (placeholder to avoid manifest error)
