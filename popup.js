@@ -31,7 +31,7 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
           resultContainer.style.whiteSpace = "pre-line";
 
           const heading = document.createElement("div");
-          heading.textContent = "🧠 BudolBlocker.AI Results";
+          heading.textContent = " BudolBlocker.AI Results";
           heading.style.fontSize = "16px";
           heading.style.fontWeight = "bold";
           heading.style.marginBottom = "10px";
