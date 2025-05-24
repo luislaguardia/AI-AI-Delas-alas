@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Barkadahan - Facebook Dark Mode Clone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --fb-dark-bg: #18191a;
+      --fb-darker-bg: #242526;
+      --fb-darkest-bg: #101112;
+      --fb-dark-card: #242526;
+      --fb-dark-gray: #b0b3b8;
+      --fb-dark-blue: #2374e1;
+      --fb-blue: #1877f2;
+      --fb-dark-hover: #3a3b3c;
+      --fb-border: #393a3b;
+      --fb-comment-bg: #292a2d;
+      --fb-scrollbar: #3a3b3c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--fb-dark-bg);
+      color: var(--fb-dark-gray);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: var(--fb-dark-bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--fb-scrollbar);
+      border-radius: 6px;
+    }
+    .navbar {
+      background: var(--fb-darker-bg);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--fb-border);
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .fb-logo {
+      font-size: 2.1rem;
+      color: #00afff;
+      margin-right: 10px;
+    }
+    .navbar-search {
+      background: var(--fb-dark-hover);
+      border-radius: 40px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar-search i {
+      color: var(--fb-dark-gray);
+      font-size: 1.1rem;
+    }
+    .navbar-search input {
+      background: transparent;
+      border: none;
+      color: #e4e6eb;
+      font-size: 1.1rem;
+      outline: none;
+      width: 150px;
+    }
+    .navbar-center {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .navbar-center .navicon {
+      color: #b0b3b8;
+      font-size: 1.55rem;
+      padding: 8px 24px;
+      border-radius: 8px 8px 0 0;
+      transition: background 0.17s, color 0.17s;
+      cursor: pointer;
+      position: relative;
+    }
+    .navbar-center .navicon.active {
+      color: var(--fb-blue);
+      border-bottom: 3px solid var(--fb-blue);
+      background: var(--fb-dark-hover);
+    }
+    .navbar-center .navicon:hover:not(.active) {
+      background: var(--fb-dark-hover);
+      color: #fff;
+    }
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .navbar-circle {
+      width: 38px;
+      height: 38px;
+      background: var(--fb-dark-hover);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: #e4e6eb;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      outline: none;
+    }
+    .navbar-circle:hover {
+      background: var(--fb-blue);
+      color: #fff;
+    }
+    .navbar-profilepic {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--fb-blue);
+    }
+    .layout {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      margin: 0 auto;
+      width: 100vw;
+      gap: 18px;
+      max-width: 1800px;
+      min-height: 92vh;
+      position: relative;
+    }
+    .sidebar {
+      width: 320px;
+      min-width: 190px;
+      max-width: 340px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px 0 10px 0;
+      margin-left: 2px;
+      height: 100vh;
+      position: sticky;
+      top: 57px;
+      overflow-y: auto;
+    }
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 12px;
+    }
+    .profile-row img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-row span {
+      font-weight: 600;
+      color: #e4e6eb;
+      font-size: 1.05rem;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 1.07rem;
+      color: #e4e6eb;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .16s;
+    }
+    .sidebar-link i {
+      font-size: 1.33rem;
+      width: 28px;
+      color: var(--fb-blue);
+      text-align: center;
+    }
+    .sidebar-link:hover {
+      background: var(--fb-dark-hover);
+    }
+    .sidebar-small {
+      color: #b0b3b8;
+      font-size: 0.93rem;
+      margin: 11px 0 4px 12px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+    .shortcut-group {
+      margin-bottom: 18px;
+    }
+    .shortcut-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      color: #e4e6eb;
+      text-decoration: none;
+      font-size: 0.97rem;
+      font-weight: 500;
+      transition: background .14s;
+    }
+    .shortcut-link img {
+      width: 34px;
+      height: 34px;
+      border-radius: 5px;
+      object-fit: cover;
+      border: 1.5px solid #222;
+      background: #19191b;
+    }
+    .shortcut-link:hover {
+      background: var(--fb-dark-hover);
+    }
+    .feed-container {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .feed {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .post-card {
+      background: var(--fb-dark-card);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--fb-border);
+      margin-bottom: 4px;
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      padding: 13px 18px 8px 18px;
+      gap: 13px;
+    }
+    .post-header .pfp {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .post-header-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .post-header-details .poster-name {
+      color: #e4e6eb;
+      font-weight: 600;
+      font-size: 1.02rem;
+      margin-right: 4px;
+    }
+    .post-header-details .poster-meta {
+      font-size: 0.97rem;
+      color: #b0b3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .post-header .more {
+      color: #b0b3b8;
+      font-size: 1.4rem;
+      margin-left: 8px;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 3px 7px;
+      transition: background .14s;
+    }
+    .post-header .more:hover {
+      background: var(--fb-dark-hover);
+      color: #fff;
+    }
+    .post-caption {
+      padding: 8px 18px 0 18px;
+      color: #e4e6eb;
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.36;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+    .post-reactions-bar {
+      padding: 7px 18px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1.08rem;
+      color: #b0b3b8;
+      border-bottom: 1px solid var(--fb-border);
+    }
+    .post-reactions-bar .reactions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1.08rem;
+    }
+    .post-reactions-bar .reaction-emoji {
+      font-size: 1.17rem;
+      margin-right: 2px;
+    }
+    .post-reactions-bar .reaction-emoji.love { color: #e03c60;}
+    .post-reactions-bar .reaction-emoji.care { color: #f7b125;}
+    .post-reactions-bar .reaction-emoji.haha { color: #ffc107;}
+    .post-reactions-bar .reaction-emoji.like { color: #1877f2;}
+    .post-reactions-bar .reaction-users {
+      margin-left: 4px;
+      color: #b0b3b8;
+      font-size: 0.98rem;
+    }
+    .post-reactions-bar .right {
+      margin-left: auto;
+      font-size: 0.98rem;
+    }
+    .post-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 5px 0 5px 0;
+      background: var(--fb-dark-card);
+      border-radius: 0 0 12px 12px;
+    }
+    .post-action-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: #b0b3b8;
+      font-size: 1.04rem;
+      font-weight: 500;
+      padding: 10px 0;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background .13s, color .13s;
+    }
+    .post-action-btn:hover {
+      background: var(--fb-dark-hover);
+      color: #fff;
+    }
+    .sidebar-right {
+      width: 320px;
+      min-width: 190px;
+      max-width: 340px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      padding: 18px 0 10px 0;
+      margin-right: 2px;
+      height: 100vh;
+      position: sticky;
+      top: 57px;
+      overflow-y: auto;
+    }
+    .right-block {
+      margin-bottom: 14px;
+      background: none;
+      border-radius: 8px;
+    }
+    .right-block-title {
+      font-size: 1.04rem;
+      font-weight: 600;
+      color: #b0b3b8;
+      margin-bottom: 7px;
+      margin-left: 10px;
+      letter-spacing: 0.2px;
+      margin-top: 2px;
+    }
+    .sponsored {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 2px 4px 6px 4px;
+    }
+    .sponsored-ad {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: #e4e6eb;
+      padding: 5px 2px;
+      border-radius: 6px;
+      font-size: 0.98rem;
+    }
+    .sponsored-ad img {
+      width: 58px;
+      height: 45px;
+      object-fit: cover;
+      border-radius: 7px;
+    }
+    .sponsored-ad .ad-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+    }
+    .sponsored-ad .ad-title {
+      font-weight: 600;
+      color: #e4e6eb;
+      font-size: 0.96rem;
+      margin-bottom: 2px;
+    }
+    .sponsored-ad .ad-link {
+      color: #b0b3b8;
+      font-size: 0.89rem;
+    }
+    .birthdays {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 5px 4px 12px 4px;
+    }
+    .birthday-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.99rem;
+    }
+    .birthday-row i {
+      color: #f33d8b;
+      font-size: 1.15rem;
+    }
+    .birthday-row span {
+      color: #e4e6eb;
+    }
+    .contacts-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 2px 4px 10px 4px;
+    }
+    .contact-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+      margin-left: 5px;
+    }
+    .contact-header span {
+      flex: 1;
+      color: #b0b3b8;
+      font-weight: 600;
+      font-size: 1.05rem;
+      letter-spacing: 0.1px;
+    }
+    .contact-header i {
+      color: #b0b3b8;
+      cursor: pointer;
+      font-size: 1.08rem;
+      margin-left: 6px;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 5px;
+      border-radius: 7px;
+      transition: background .13s;
+      cursor: pointer;
+    }
+    .contact-row:hover {
+      background: var(--fb-dark-hover);
+    }
+    .contact-row img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--fb-blue);
+    }
+    .contact-row span {
+      color: #e4e6eb;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    @media (max-width: 1250px) {
+      .sidebar, .sidebar-right {
+        display: none;
+      }
+      .layout {
+        gap: 0;
+      }
+      .feed {
+        max-width: 100vw;
+      }
+    }
+    @media (max-width: 800px) {
+      .navbar-search {
+        display: none;
+      }
+      .feed {
+        max-width: 98vw;
+      }
+      .post-card {
+        margin: 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <i class="fa-brands fa-facebook fb-logo"></i>
+      <div class="navbar-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Facebook">
+      </div>
+    </div>
+    <div class="navbar-center">
+      <span class="navicon active" title="Home"><i class="fa-solid fa-house"></i></span>
+      <span class="navicon" title="Watch"><i class="fa-solid fa-tv"></i></span>
+      <span class="navicon" title="Marketplace"><i class="fa-solid fa-store"></i></span>
+      <span class="navicon" title="Groups"><i class="fa-solid fa-user-group"></i></span>
+      <span class="navicon" title="Gaming"><i class="fa-solid fa-gamepad"></i></span>
+    </div>
+    <div class="navbar-right">
+      <button class="navbar-circle" title="Menu"><i class="fa-solid fa-bars"></i></button>
+      <button class="navbar-circle" title="Messenger"><i class="fa-brands fa-facebook-messenger"></i></button>
+      <button class="navbar-circle" title="Notifications"><i class="fa-regular fa-bell"></i></button>
+      <img class="navbar-profilepic" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile">
+    </div>
+  </div>
+  <!-- Main Layout -->
+  <div class="layout">
+    <!-- Sidebar Left -->
+    <aside class="sidebar">
+      <div class="profile-row">
+        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile">
+        <span>イベル ジョセフ</span>
+      </div>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-circle"></i>Meta AI</a>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-user-group"></i>Friends</a>
+      <a class="sidebar-link" href="#"><i class="fa-regular fa-clock"></i>Memories</a>
+      <a class="sidebar-link" href="#"><i class="fa-regular fa-bookmark"></i>Saved</a>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-people-group"></i>Groups</a>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-tv"></i>Video</a>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-store"></i>Marketplace</a>
+      <a class="sidebar-link" href="#"><i class="fa-solid fa-chevron-down"></i>See more</a>
+      <div class="sidebar-small">Your shortcuts</div>
+      <div class="shortcut-group">
+        <a class="shortcut-link" href="#"><img src="https://i.imgur.com/GyXz5IC.png" alt="">Bentahan ng Murang Desktop Computer Set (Parts/Accessories)</a>
+        <a class="shortcut-link" href="#"><img src="https://i.imgur.com/g1ykgdP.png" alt="">BENTAHAN NG COMPUTER 2ND HAND</a>
+        <a class="shortcut-link" href="#"><img src="https://i.imgur.com/44lQf81.png" alt="">Pc Buy & Sell Philippines</a>
+        <a class="shortcut-link" href="#"><img src="https://i.imgur.com/x8kSiBK.png" alt="">Computer Desktop & Laptop Buy And sell</a>
+        <a class="shortcut-link" href="#"><img src="https://i.imgur.com/44lQf81.png" alt="">PC Buy and Sell</a>
+        <a class="sidebar-link" href="#" style="margin-left:2px;"><i class="fa-solid fa-chevron-down"></i>See more</a>
+      </div>
+    </aside>
+    <!-- Feed -->
+    <main class="feed-container">
+      <div class="feed">
+        <!-- SCAMMY POST 1 -->
+        <div class="post-card">
+          <div class="post-header">
+            <img class="pfp" src="https://randomuser.me/api/portraits/men/21.jpg" alt="CashWin Philippines">
+            <div class="post-header-details">
+              <span class="poster-name">CashWin Philippines <span style="font-weight:400;color:#b0b3b8;font-size:0.96em;">· Sponsored</span></span>
+              <div class="poster-meta">
+                <span>Just now</span>
+                <span><i class="fa-solid fa-earth-asia"></i></span>
+              </div>
+            </div>
+            <span class="more"><i class="fa-solid fa-ellipsis"></i></span>
+          </div>
+          <div class="post-caption">
+            🤑 <b>CONGRATULATIONS!</b> Nanalo si <b>Mark, 28 yrs old</b> ng <b>₱50,000</b> sa loob lang ng 15 minutes!<br>
+            <br>
+            Gusto mo rin bang manalo? Mag-sign up na at subukan ang aming <b>Lucky Spin!</b> Wala kang babayaran, mabilis ang payout.<br>
+            <br>
+            <b>I-click ang link na ito:</b> <span style="color:#2e89ff; text-decoration:underline; cursor:pointer;">www.cashwinph.co/lucky</span>
+            <br>
+            <i>Limited slots only! Legit daw sabi ng kapitbahay ko. PM now!</i>
+          </div>
+          <div class="post-reactions-bar">
+            <span class="reactions">
+              <span class="reaction-emoji like">👍</span>
+              <span class="reaction-emoji haha">😆</span>
+              <span class="reaction-users">243 others</span>
+            </span>
+            <span class="right">92 comments · 17 shares</span>
+          </div>
+          <div class="post-actions-bar">
+            <button class="post-action-btn"><i class="fa-regular fa-thumbs-up"></i> Like</button>
+            <button class="post-action-btn"><i class="fa-regular fa-comment"></i> Comment</button>
+            <button class="post-action-btn"><i class="fa-solid fa-share"></i> Share</button>
+          </div>
+        </div>
+        <!-- SCAMMY POST 2 -->
+        <div class="post-card">
+          <div class="post-header">
+            <img class="pfp" src="https://randomuser.me/api/portraits/women/43.jpg" alt="EasyLoan Online">
+            <div class="post-header-details">
+              <span class="poster-name">EasyLoan Online <span style="font-weight:400;color:#b0b3b8;font-size:0.96em;">· Sponsored</span></span>
+              <div class="poster-meta">
+                <span>10 mins</span>
+                <span><i class="fa-solid fa-earth-asia"></i></span>
+              </div>
+            </div>
+            <span class="more"><i class="fa-solid fa-ellipsis"></i></span>
+          </div>
+          <div class="post-caption">
+            <b>PAHINGI LANG NG 1 MINUTO MO!</b><br>
+            <br>
+            No requirements, no collateral!<br>
+            Get up to <b>₱100,000</b> instant cash, direct sa GCash!<br>
+            <br>
+            Mag-apply na using your FB account. <span style="color:#2e89ff; text-decoration:underline; cursor:pointer;">Apply here</span><br>
+            <i>100% approval daw, mabilis, walang kuskos balungos!</i>
+            <br>
+            <b>Huwag palampasin!</b> <span style="color:#c1111a;">#EasyMoney #InstantLoan</span>
+          </div>
+          <div class="post-reactions-bar">
+            <span class="reactions">
+              <span class="reaction-emoji like">👍</span>
+              <span class="reaction-emoji care">🥺</span>
+              <span class="reaction-users">134 others</span>
+            </span>
+            <span class="right">53 comments · 7 shares</span>
+          </div>
+          <div class="post-actions-bar">
+            <button class="post-action-btn"><i class="fa-regular fa-thumbs-up"></i> Like</button>
+            <button class="post-action-btn"><i class="fa-regular fa-comment"></i> Comment</button>
+            <button class="post-action-btn"><i class="fa-solid fa-share"></i> Share</button>
+          </div>
+        </div>
+        <!-- SCAMMY POST 3 -->
+        <div class="post-card">
+          <div class="post-header">
+            <img class="pfp" src="https://randomuser.me/api/portraits/men/46.jpg" alt="CryptoGuru">
+            <div class="post-header-details">
+              <span class="poster-name">CryptoGuru PH <span style="font-weight:400;color:#b0b3b8;font-size:0.96em;">· Public</span></span>
+              <div class="poster-meta">
+                <span>30 mins</span>
+                <span><i class="fa-solid fa-earth-asia"></i></span>
+              </div>
+            </div>
+            <span class="more"><i class="fa-solid fa-ellipsis"></i></span>
+          </div>
+          <div class="post-caption">
+            <b>GUSTO MO BA NG EXTRA INCOME?</b>💸<br>
+            <br>
+            Kumita ng hanggang <b>₱5,000 kada araw</b> gamit lang ang cellphone at data!<br>
+            <br>
+            Sumali na sa exclusive <span style="color:#f7b125;">crypto trading group</span> — wala kang babayaran!<br>
+            <br>
+            <b>Step 1:</b> I-comment ang "SALI AKO!"<br>
+            <b>Step 2:</b> I-PM kita for instructions.<br>
+            <br>
+            <i>(Limitado lang ang slots. Hindi ito pyramid! Trust me bro!)</i>
+          </div>
+          <div class="post-reactions-bar">
+            <span class="reactions">
+              <span class="reaction-emoji like">👍</span>
+              <span class="reaction-emoji haha">😆</span>
+              <span class="reaction-users">192 others</span>
+            </span>
+            <span class="right">76 comments · 18 shares</span>
+          </div>
+          <div class="post-actions-bar">
+            <button class="post-action-btn"><i class="fa-regular fa-thumbs-up"></i> Like</button>
+            <button class="post-action-btn"><i class="fa-regular fa-comment"></i> Comment</button>
+            <button class="post-action-btn"><i class="fa-solid fa-share"></i> Share</button>
+          </div>
+        </div>
+        <!-- LEGIT POST 4 -->
+        <div class="post-card">
+          <div class="post-header">
+            <img class="pfp" src="https://randomuser.me/api/portraits/women/65.jpg" alt="Ana Bautista">
+            <div class="post-header-details">
+              <span class="poster-name">Ana Bautista</span>
+              <div class="poster-meta">
+                <span>2 hrs</span>
+                <span><i class="fa-solid fa-earth-asia"></i></span>
+              </div>
+            </div>
+            <span class="more"><i class="fa-solid fa-ellipsis"></i></span>
+          </div>
+          <div class="post-caption">
+            <b>Salamat Lord, passed na ako sa board exam! 😭✨</b><br>
+            <br>
+            Pagod at puyat lahat worth it. Thank you sa family, friends, at sa mga nagdasal para sa akin.<br>
+            <br>
+            <i>Keep chasing your dreams, mga ka-Barkadahan! 🙏💙</i>
+          </div>
+          <div class="post-reactions-bar">
+            <span class="reactions">
+              <span class="reaction-emoji love">😍</span>
+              <span class="reaction-emoji like">👍</span>
+              <span class="reaction-emoji care">🥰</span>
+              <span class="reaction-users">You and 312 others</span>
+            </span>
+            <span class="right">44 comments · 101 shares</span>
+          </div>
+          <div class="post-actions-bar">
+            <button class="post-action-btn"><i class="fa-regular fa-thumbs-up"></i> Like</button>
+            <button class="post-action-btn"><i class="fa-regular fa-comment"></i> Comment</button>
+            <button class="post-action-btn"><i class="fa-solid fa-share"></i> Share</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Sidebar Right -->
+    <aside class="sidebar-right">
+      <div class="right-block">
+        <div class="right-block-title">Sponsored</div>
+        <div class="sponsored">
+          <a class="sponsored-ad" href="#">
+            <img src="https://i.imgur.com/1q5q4BN.png" alt="Cebu Pacific">
+            <div class="ad-details">
+              <span class="ad-title">Wag magpahuli, book now!</span>
+              <span class="ad-link">cebupacificair.com</span>
+            </div>
+          </a>
+          <a class="sponsored-ad" href="#">
+            <img src="https://i.imgur.com/TdG6m4u.png" alt="XM Trade">
+            <div class="ad-details">
+              <span class="ad-title">Join XM and Trade for Free</span>
+              <span class="ad-link">xm.com</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="right-block">
+        <div class="right-block-title">Birthdays</div>
+        <div class="birthdays">
+          <div class="birthday-row">
+            <i class="fa-solid fa-gift"></i>
+            <span><strong>Kurt Cantuba</strong> and 2 others have birthdays today.</span>
+          </div>
+        </div>
+      </div>
+      <div class="right-block">
+        <div class="contact-header">
+          <span>Contacts</span>
+          <i class="fa-solid fa-video"></i>
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <i class="fa-solid fa-ellipsis"></i>
+        </div>
+        <div class="contacts-section">
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/men/1.jpg"><span>Lester Mandingiado</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/men/2.jpg"><span>Andrew Tan</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/men/3.jpg"><span>Clarence Jay Fetalingo</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/women/4.jpg"><span>Trisha Mae Patasin</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/men/5.jpg"><span>Ian Bedua Plandez</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/men/6.jpg"><span>Charles Rene Monsales</span></div>
+          <div class="contact-row"><img src="https://randomuser.me/api/portraits/women/7.jpg"><span>Erica Galindo</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
